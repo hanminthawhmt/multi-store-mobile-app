@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:multi_store_app/controllers/auth_controller.dart';
 import 'package:multi_store_app/views/screens/authentication_screens/login_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
+  final AuthController _authController = AuthController();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  late String email;
+  late String fullName;
+  late String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +32,6 @@ class RegisterScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
-            
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -51,10 +67,12 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
-                    validator: (value){
-                      if(value!.isEmpty){
+                    controller: emailController,
+                    //onChanged: (value) => email = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
                         return "enter your email";
-                      }else{
+                      } else {
                         return null;
                       }
                     },
@@ -102,10 +120,12 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
-                    validator: (value){
-                      if(value!.isEmpty){
+                    controller: fullNameController,
+                    //onChanged: (value) => fullName = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
                         return 'enter your full name';
-                      }else{
+                      } else {
                         return null;
                       }
                     },
@@ -152,10 +172,12 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
-                    validator: (value){
-                      if(value!.isEmpty){
-                        return 'enter your email';
-                      }else{
+                    controller: passwordController,
+                    //onChanged: (value) => password = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'enter your password';
+                      } else {
                         return 'null';
                       }
                     },
@@ -193,12 +215,14 @@ class RegisterScreen extends StatelessWidget {
                     height: 20,
                   ),
                   InkWell(
-                    onTap: (){
-                      if(_formKey.currentState!.validate()){
-                            print('correct');
-                          }else{
-                            print('fail');
-                          }
+                    onTap: () async{
+                      if (_formKey.currentState!.validate()) {
+                        await _authController.signUpUsers(
+                            context: context,
+                            fullName: fullNameController.text,
+                            email: emailController.text,
+                            password: passwordController.text);
+                      }
                     },
                     child: Container(
                       width: 319,
