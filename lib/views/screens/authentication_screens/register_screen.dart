@@ -35,7 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Login Your Account',
+                  Text('Sing Up Your Account',
                       style: GoogleFonts.getFont(
                         'Lato',
                         color: Colors.black,
@@ -172,13 +172,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   TextFormField(
+                    obscureText: true,
                     controller: passwordController,
                     //onChanged: (value) => password = value,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'enter your password';
                       } else {
-                        return 'null';
+                        return null;
                       }
                     },
                     decoration: InputDecoration(

@@ -9,6 +9,7 @@ class User {
   final String? city;
   final String? locality;
   final String? password;
+  final String? token;
 
   User(
       {required this.id,
@@ -17,7 +18,8 @@ class User {
       required this.state,
       required this.city,
       required this.locality,
-      required this.password});
+      required this.password,
+      required this.token});
 
   // Serialization(toJSON) for handling API requests
   // Converts model data before sending (Model object → Map → JSON string).
@@ -30,7 +32,8 @@ class User {
       "state": state,
       "city": city,
       "locality": locality,
-      "password": password
+      "password": password,
+      "token" : token
     };
   }
 
@@ -58,7 +61,8 @@ class User {
         state: map['state'] as String? ?? "",
         city: map['city'] as String? ?? "",
         locality: map['locality'] as String? ?? "",
-        password: map['password'] as String? ?? "");
+        password: map['password'] as String? ?? "",
+        token: map['token'] as String? ?? "");
   }
  
   
