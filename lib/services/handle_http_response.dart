@@ -9,7 +9,7 @@ void handleResponse(
     required Function() onSuccess}) {
   switch (response.statusCode) {
     case (200):
-      onSuccess;
+      onSuccess();
       break;
     case (400):
       showSnackBar(context, jsonDecode(response.body)['message']);
@@ -18,7 +18,7 @@ void handleResponse(
       showSnackBar(context, jsonDecode(response.body)['error']);
       break;
     case (201):
-      onSuccess;
+      onSuccess();
       break;
   }
 }

@@ -14,13 +14,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthController _authController = AuthController();
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
   late String email;
   late String fullName;
   late String password;
+
+  bool isLoading = false;
+
+  void registerUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    await _authController
+        .signUpUsers(
+            context: context,
+            fullName: fullName,
+            email: email,
+            password: password)
+        .whenComplete(() {
+      _formKey.currentState!.reset();
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   TextFormField(
-                    controller: emailController,
-                    //onChanged: (value) => email = value,
+                    onChanged: (value) => email = value,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "enter your email";
@@ -120,8 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   TextFormField(
-                    controller: fullNameController,
-                    //onChanged: (value) => fullName = value,
+                    onChanged: (value) => fullName = value,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'enter your full name';
@@ -173,8 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextFormField(
                     obscureText: true,
-                    controller: passwordController,
-                    //onChanged: (value) => password = value,
+                    onChanged: (value) => password = value,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'enter your password';
@@ -216,13 +229,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 20,
                   ),
                   InkWell(
-                    onTap: () async{
+                    onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        await _authController.signUpUsers(
-                            context: context,
-                            fullName: fullNameController.text,
-                            email: emailController.text,
-                            password: passwordController.text);
+                        registerUser();
                       }
                     },
                     child: Container(

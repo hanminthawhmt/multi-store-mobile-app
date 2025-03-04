@@ -15,6 +15,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthController _authController = AuthController();
   late String email;
   late String password;
+  bool isLoading = false;
+
+  void loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    await _authController
+        .signInUsers(context: context, email: email, password: password)
+        .whenComplete(() {
+      _formKey.currentState!.reset();
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +129,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   TextFormField(
-                    onChanged: (value){
+                    obscureText: true,
+                    onChanged: (value) {
                       password = value;
                     },
                     validator: (value) {
@@ -160,10 +176,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   InkWell(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        _authController.signInUsers(context: context, email: email, password: password);
-                      } else {
-                        
-                      }
+                        loginUser();
+                      } else {}
                     },
                     child: Container(
                       width: 319,
